@@ -38,7 +38,7 @@ runGame (Just solution) = do
   ((result, log), state) <- runStateT (runReaderT (runWriterT runTurn) solution) newGame
   let p1Score = show $ fst (scores state)
   let p2Score = show $ snd (scores state)
-  putStrLn "\nROUND ENDED!"
+  putStrLn $ "\nSOLUTION " ++ solution ++ " FOUND! ROUND ENDED!"
   putStrLn $ "PLAYER 1: " ++ p1Score ++ " points"
   putStrLn $ "PLAYER 2: " ++ p2Score ++ " points"
   putStrLn "HERE'S HOW IT WENT:"
