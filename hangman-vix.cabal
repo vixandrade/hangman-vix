@@ -34,5 +34,7 @@ executable vix-hang
                     , text
                     , transformers
                     , ansi-terminal
+                    , MonadRandom
+                    , directory
     hs-source-dirs:   app
     default-language: Haskell2010

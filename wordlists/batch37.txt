@@ -1,0 +1,9 @@
+cardano
+blockchain
+haskell
+functional
+monadtransformer
+emurgoacademy
+cryptocurrency
+smartcontract
+immutable

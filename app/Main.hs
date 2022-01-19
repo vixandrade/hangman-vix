@@ -1,39 +1,40 @@
 module Main where
 
+import Control.Monad.Random
 import Control.Monad.Reader
 import Control.Monad.State.Lazy
 import Control.Monad.Trans.Class (lift)
+import Control.Monad.Trans.Maybe
 import Control.Monad.Trans.Writer.CPS
 import Data.Char (toUpper)
 import Data.List
-import Data.Text (Text, pack)
+import Data.Text (Text, pack, unpack)
 import System.Console.ANSI
 import System.IO
+import System.Directory
 
 ----
-
--- Get Solution from user or file (IO)
--- Provided Solution will be constant (Reader)
--- Run GameTurns recursively until guesses match Solution (State)
--- In each turn, if user guesses correct letter, accumulates Score (Writer)
 
 data GameState = GameState
   { guessed :: [Char],
     currentPlayer :: Bool,
     scores :: (Int, Int)
-  } deriving (Show)
+  }
+  deriving (Show)
 
 newGame :: GameState
-newGame = GameState {
-  guessed = [],
-  currentPlayer = True,
-  scores = (0,0)
-}
+newGame =
+  GameState
+    { guessed = [],
+      currentPlayer = True,
+      scores = (0, 0)
+    }
 
 type Turn = WriterT Text (ReaderT String (StateT GameState IO))
 
 runTurn :: Turn String
 runTurn = do
+  lift $ lift $ lift clearScreen
   solution <- lift ask
   currentState <- lift get
   let guesses = guessed currentState
@@ -42,16 +43,14 @@ runTurn = do
   if masked == solution
     then return "Success"
     else do
-      lift $ lift $ lift $ print currentState
-      lift $ lift $ lift $ print "=============================="
-      lift $ lift $ lift $ print masked
-      lift $ lift $ lift $ print (getPlayerName player ++ ": Guess a letter:")
+      lift $ lift $ lift $ putStrLn "=============================="
+      lift $ lift $ lift $ putStrLn (">> " ++ masked ++ " <<")
+      lift $ lift $ lift $ putStrLn (getPlayerName player ++ ": Guess a letter:")
       guess <- lift $ lift $ lift getChar
       let score = getScore guess guesses solution
-      tell $ pack (toUpper guess : ": was guessed for " ++ show score ++ " points! \n")
+      tell $ pack (toUpper guess : ": was guessed by " ++ getPlayerName player ++ " for " ++ show score ++ " points! \n")
       let newGuesses = guess : guesses
       lift $ modify (updateState score newGuesses)
-      lift $ lift $ lift clearScreen
       runTurn
 
 updateState :: Int -> [Char] -> GameState -> GameState
@@ -83,11 +82,43 @@ getScore c guesses solution
   | c `elem` ['a', 'e', 'i', 'o', 'u'] = 5
   | otherwise = 10
 
-runGame :: IO ()
-runGame = do
+getSolution :: String -> MaybeT IO String
+getSolution wordlist = do
+  let wordlistFile = "wordlists/" ++ wordlist ++ ".txt"
+  fileExists <- lift $ doesFileExist wordlistFile
+  if not fileExists
+    then do
+      lift $ print "Wordlist not available!"
+      MaybeT (return Nothing)
+    else do
+      fileContents <- lift $ readFile wordlistFile
+      let words = lines fileContents
+      rand <- getRandomR (0, length words - 1)
+      return (words !! rand)
+
+runGame :: Maybe String -> IO ()
+runGame Nothing = main
+runGame (Just solution) = do
   hSetBuffering stdin NoBuffering
-  ((result, log), state) <- runStateT (runReaderT (runWriterT runTurn) "botequim") newGame
-  print state
+  ((result, log), state) <- runStateT (runReaderT (runWriterT runTurn) solution) newGame
+  let p1Score = show $ fst (scores state)
+  let p2Score = show $ snd (scores state)
+  putStrLn "\nROUND ENDED!"
+  putStrLn $ "PLAYER 1: " ++ p1Score ++ " points"
+  putStrLn $ "PLAYER 2: " ++ p2Score ++ " points"
+  putStrLn "HERE'S HOW IT WENT:"
+  putStrLn $ unpack log
+  putStrLn "====================\nPLAY AGAIN? Y/N"
+  again <- getChar
+  if again == 'y'
+    then do main
+    else putStrLn "\nOK, goodbye!"
+  
 
 main :: IO ()
-main = runGame
+main = do
+  clearScreen
+  putStrLn "CHOOSE A WORDLIST: (batch37, movies, premierleague):"
+  wordlist <- getLine 
+  solution <- runMaybeT (getSolution wordlist)
+  runGame solution
