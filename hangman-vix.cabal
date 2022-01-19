@@ -30,11 +30,21 @@ executable vix-hang
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:    base ^>=4.14.3.0
+                    , game
+                    , ansi-terminal
+                    , transformers
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+library game
+    build-depends:   base ^>=4.14.3.0
                     , mtl
                     , text
                     , transformers
                     , ansi-terminal
                     , MonadRandom
                     , directory
-    hs-source-dirs:   app
+    exposed-modules:   Game.Auxiliary
+                     , Game.Runner
+    hs-source-dirs:   src
     default-language: Haskell2010
