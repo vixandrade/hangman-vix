@@ -56,6 +56,7 @@ runTurn = do
     then return "Success"
     else do
       lift $ lift $ lift $ putStrLn "=============================="
+      lift $ lift $ lift $ putStrLn ("== Already Guessed: " ++ intersperse ' ' guesses)
       lift $ lift $ lift $ putStrLn (">> " ++ masked ++ " <<")
       lift $ lift $ lift $ putStrLn (getPlayerName player ++ ": Guess a letter:")
       guess <- lift $ lift $ lift getChar
