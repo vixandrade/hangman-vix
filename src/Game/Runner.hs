@@ -24,7 +24,7 @@ data GameState = GameState
 newGame :: GameState
 newGame =
   GameState
-    { guessed = [],
+    { guessed = [' '],
       currentPlayer = True,
       scores = (0, 0)
     }

@@ -1,13 +1,20 @@
 arsenal
+aston villa
+brentford
+brighton
 burnley
 chelsea
-manchesterunited
-manchestercity
-tottenham
-norwich
-brighton
-astonvilla
+crystal palace
 everton
-southampton
-watford
+leeds united
+leicester
+liverpool
+manchester united
+manchester city
 newcastle
+norwich
+southampton
+tottenham
+watford
+west ham
+wolverhampton

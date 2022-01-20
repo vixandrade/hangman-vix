@@ -1,8 +1,18 @@
-pulpfiction
-bladerunner
-thegoodthebadandtheugly
-harrypotter
-lordoftherings
-avatar
-dune
-spiderman
+pulp fiction
+blade runner
+the good the bad and the ugly
+harry potter
+the lord of the rings
+the godfather
+the shawshank redemption
+fight club
+forrest gump
+star wars
+the matrix
+interstellar
+saving private ryan
+spirited away
+the green mile
+terminator
+jurassic park
+the lion king

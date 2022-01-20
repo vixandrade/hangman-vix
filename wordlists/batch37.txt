@@ -1,9 +1,19 @@
 cardano
 blockchain
 haskell
-functional
-monadtransformer
-emurgoacademy
+functional programming
+monad transformer
+emurgo academy
 cryptocurrency
-smartcontract
-immutable
+smart contract
+immutability
+pure function
+descentralized
+consensus
+cryptography
+distributed ledger
+stake pool
+polymorphism
+applicative
+functor
+lambda calculus
