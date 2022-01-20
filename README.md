@@ -7,4 +7,4 @@ I've changed the rules of the game to make it complex enough to introduce Monads
 
 This version has two players competing for the highest score – each correct guess adds to the score depending on the guessed letter.
 
-The word to be used as solution is loaded from a dictionary file. A of the guesses and awarded points is shown at the end of the game.
+The word to be used as solution is loaded from a dictionary file. Each of the player's guesses and awarded points are shown at the end of the game.
